@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gartner CIO Leadership Forum 2026 — 簡報</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-deep: #0B0F1A;
+    --bg-slide: #101827;
+    --bg-card: rgba(255,255,255,0.04);
+    --bg-card-border: rgba(255,255,255,0.08);
+    --text-primary: #F1F5F9;
+    --text-secondary: rgba(241,245,249,0.6);
+    --text-muted: rgba(241,245,249,0.35);
+    --accent-gold: #F5A623;
+    --accent-gold-dim: rgba(245,166,35,0.15);
+    --accent-red: #EF4444;
+    --accent-red-dim: rgba(239,68,68,0.12);
+    --accent-teal: #2DD4BF;
+    --accent-teal-dim: rgba(45,212,191,0.12);
+    --accent-blue: #60A5FA;
+    --accent-blue-dim: rgba(96,165,250,0.12);
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'Noto Sans TC', 'Inter', -apple-system, sans-serif;
+  }
+
+  /* ── Slide Container ── */
+  .deck {
+    width: 100%; height: 100%;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(40px, 6vw, 100px) clamp(48px, 8vw, 140px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+  }
+
+  .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ── Typography ── */
+  .slide-title {
+    font-size: clamp(2rem, 3.2vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    margin-bottom: clamp(20px, 3vw, 40px);
+  }
+
+  .slide-subtitle {
+    font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+    font-weight: 400;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    max-width: 52em;
+  }
+
+  .slide-subtitle p {
+    margin-bottom: 1em;
+  }
+
+  .slide-subtitle strong {
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+
+  .hero-number {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .label {
+    font-size: clamp(0.7rem, 0.9vw, 0.85rem);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  /* ── Slide 0: Title ── */
+  .slide--title {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 30% 50%, rgba(245,166,35,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 60%, rgba(96,165,250,0.05) 0%, transparent 60%),
+      var(--bg-slide);
+  }
+
+  .slide--title .deck-title {
+    font-size: clamp(2.2rem, 4vw, 4rem);
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+
+  .slide--title .deck-subtitle {
+    font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+    color: var(--accent-gold);
+    font-weight: 500;
+    margin-bottom: 48px;
+  }
+
+  .slide--title .deck-meta {
+    font-size: clamp(0.85rem, 1vw, 1rem);
+    color: var(--text-muted);
+  }
+
+  /* ── Stat Row ── */
+  .stat-row {
+    display: flex;
+    gap: clamp(16px, 3vw, 40px);
+    margin-bottom: clamp(28px, 4vw, 56px);
+    flex-wrap: wrap;
+  }
+
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--bg-card-border);
+    border-radius: 16px;
+    padding: clamp(20px, 2.5vw, 32px) clamp(24px, 3vw, 40px);
+    min-width: 160px;
+    flex: 1;
+  }
+
+  .stat-card .hero-number {
+    font-size: clamp(2.2rem, 4vw, 3.8rem);
+    color: var(--accent-gold);
+    margin-bottom: 8px;
+  }
+
+  .stat-card .stat-label {
+    font-size: clamp(0.85rem, 1.1vw, 1.05rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── Accent stat variant ── */
+  .stat-card--red .hero-number { color: var(--accent-red); }
+  .stat-card--red { border-color: var(--accent-red-dim); background: var(--accent-red-dim); }
+
+  .stat-card--teal .hero-number { color: var(--accent-teal); }
+  .stat-card--teal { border-color: var(--accent-teal-dim); background: var(--accent-teal-dim); }
+
+  .stat-card--blue .hero-number { color: var(--accent-blue); }
+  .stat-card--blue { border-color: var(--accent-blue-dim); background: var(--accent-blue-dim); }
+
+  .stat-card--gold .hero-number { color: var(--accent-gold); }
+  .stat-card--gold { border-color: var(--accent-gold-dim); background: var(--accent-gold-dim); }
+
+  /* ── Case Study List ── */
+  .case-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: clamp(16px, 2vw, 28px) 0;
+  }
+
+  .case-list li {
+    font-size: clamp(1rem, 1.4vw, 1.3rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+    padding-left: 28px;
+    position: relative;
+  }
+
+  .case-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    background: var(--accent-gold);
+    opacity: 0.7;
+  }
+
+  .case-list li strong {
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+
+  /* ── Takeaway Cards ── */
+  .takeaway-grid {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 2vw, 24px);
+  }
+
+  .takeaway-card {
+    display: flex;
+    gap: clamp(16px, 2vw, 28px);
+    align-items: flex-start;
+    background: var(--bg-card);
+    border: 1px solid var(--bg-card-border);
+    border-radius: 16px;
+    padding: clamp(20px, 2.5vw, 32px);
+  }
+
+  .takeaway-num {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.4rem, 2vw, 2rem);
+    font-weight: 900;
+    color: var(--accent-gold);
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-gold-dim);
+    border-radius: 12px;
+  }
+
+  .takeaway-body h3 {
+    font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+
+  .takeaway-body p {
+    font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+    line-height: 1.8;
+    color: var(--text-secondary);
+  }
+
+  /* ── Closing Quote ── */
+  .slide--closing {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(245,166,35,0.08) 0%, transparent 60%),
+      var(--bg-slide);
+  }
+
+  .closing-quote {
+    font-size: clamp(1.6rem, 3vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.5;
+    max-width: 18em;
+    letter-spacing: -0.01em;
+  }
+
+  .closing-quote .highlight {
+    color: var(--accent-gold);
+  }
+
+  /* ── Key Message Box ── */
+  .key-message {
+    margin-top: clamp(20px, 3vw, 40px);
+    padding: clamp(16px, 2vw, 24px) clamp(20px, 2.5vw, 32px);
+    border-left: 4px solid var(--accent-gold);
+    background: var(--accent-gold-dim);
+    border-radius: 0 12px 12px 0;
+    font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+    font-weight: 700;
+    line-height: 1.7;
+    color: var(--text-primary);
+  }
+
+  /* ── Source Tag ── */
+  .source {
+    margin-top: clamp(20px, 2.5vw, 36px);
+    font-size: clamp(0.7rem, 0.8vw, 0.8rem);
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  /* ── Navigation ── */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(24px, 4vw, 48px);
+    background: rgba(11,15,26,0.85);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    z-index: 100;
+    user-select: none;
+  }
+
+  .nav-counter {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .nav-counter .current { color: var(--accent-gold); }
+
+  .nav-dots {
+    display: flex;
+    gap: 8px;
+  }
+
+  .nav-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .nav-dot.active {
+    background: var(--accent-gold);
+    box-shadow: 0 0 12px rgba(245,166,35,0.4);
+  }
+
+  .nav-dot:hover:not(.active) {
+    background: rgba(255,255,255,0.25);
+  }
+
+  .nav-arrows {
+    display: flex;
+    gap: 8px;
+  }
+
+  .nav-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .nav-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--text-primary);
+  }
+
+  /* ── Progress Bar ── */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-gold), var(--accent-teal));
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 101;
+  }
+
+  /* ── Animations ── */
+  .slide.active .animate-in {
+    animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  .slide.active .animate-in:nth-child(1) { animation-delay: 0.05s; }
+  .slide.active .animate-in:nth-child(2) { animation-delay: 0.15s; }
+  .slide.active .animate-in:nth-child(3) { animation-delay: 0.25s; }
+  .slide.active .animate-in:nth-child(4) { animation-delay: 0.35s; }
+  .slide.active .animate-in:nth-child(5) { animation-delay: 0.45s; }
+  .slide.active .animate-in:nth-child(6) { animation-delay: 0.55s; }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Print ── */
+  @media print {
+    .slide { position: relative; opacity: 1; pointer-events: auto; page-break-after: always; height: auto; min-height: 100vh; }
+    .nav-bar, .progress-bar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<div class="deck" id="deck">
+
+  <!-- ═══════ SLIDE 0: TITLE ═══════ -->
+  <div class="slide slide--title active" data-slide="0">
+    <div class="label animate-in">Gartner CIO Leadership Forum 2026</div>
+    <h1 class="deck-title animate-in">三個 AI 下半場的<br>關鍵命題</h1>
+    <p class="deck-subtitle animate-in">提煉給經營層的洞察</p>
+    <p class="deck-meta animate-in">2026 年 3 月</p>
+  </div>
+
+  <!-- ═══════ SLIDE 1: 省時間沒價值 ═══════ -->
+  <div class="slide" data-slide="1">
+    <div class="label animate-in">主題一</div>
+    <h2 class="slide-title animate-in">員工省了時間，但沒有創造價值</h2>
+
+    <div class="stat-row animate-in">
+      <div class="stat-card stat-card--gold">
+        <div class="hero-number">74%</div>
+        <div class="stat-label">CFO 說「有省到時間」</div>
+      </div>
+      <div class="stat-card stat-card--red">
+        <div class="hero-number">5%</div>
+        <div class="stat-label">CFO 說「有省到錢」</div>
+      </div>
+      <div class="stat-card stat-card--red">
+        <div class="hero-number">6%</div>
+        <div class="stat-label">CFO 說「有增加營收」</div>
+      </div>
+    </div>
+
+    <div class="slide-subtitle animate-in">
+      <p>Gartner 的原話很直白：<strong>「生產力是一個低品質的效益。」</strong></p>
+      <p>Goldman Sachs 用 AI 做軟體測試，覆蓋率從 36% 提升到 72%，時間省了 90%。但團隊人數沒變、測試範圍沒擴大——90% 的「省時間」只是好看的數字，不會出現在財報上。</p>
+      <p>這就是 <strong>Productivity Leakage（生產力流失）</strong>：員工每天省了一兩個小時，但這些時間去了哪裡？沒有人知道。</p>
+    </div>
+
+    <div class="key-message animate-in">
+      買了工具、給了員工，不等於創造價值。大多數企業停在「感覺有在用」。
+    </div>
+
+    <div class="source animate-in">來源：Opening Keynote — AI After the Hype &bull; Getting Value From AI</div>
+  </div>
+
+  <!-- ═══════ SLIDE 2: 組織必須改變 ═══════ -->
+  <div class="slide" data-slide="2">
+    <div class="label animate-in">主題二</div>
+    <h2 class="slide-title animate-in">組織必須改變</h2>
+
+    <div class="stat-row animate-in">
+      <div class="stat-card stat-card--gold">
+        <div class="hero-number">89%</div>
+        <div class="stat-label">CEO 正在加碼 AI 投資</div>
+      </div>
+      <div class="stat-card stat-card--blue">
+        <div class="hero-number">1-2x</div>
+        <div class="stat-label">變革成本 = 技術成本的倍數</div>
+      </div>
+      <div class="stat-card stat-card--teal">
+        <div class="hero-number">20x</div>
+        <div class="stat-label">需要重新定義的工作 = 被裁掉的 20 倍</div>
+      </div>
+    </div>
+
+    <div class="slide-subtitle animate-in">
+      <p>CEO 不再問「AI 能不能賺錢」，在問<strong>「不靠 AI 還能怎麼贏」</strong>。Gartner 把這叫 <strong>Hireless Growth</strong>——營收繼續成長，不靠一直補人。</p>
+      <p>真正賺到錢的企業，是部署 AI <strong>之後</strong>做了組織手術：</p>
+    </div>
+
+    <ul class="case-list animate-in">
+      <li>跟外包商重新談判，省下 <strong>130 萬</strong>翻譯合約（加拿大客戶）</li>
+      <li>AI 訓練模擬器壓縮養成期，認證失敗率<strong>降 71%</strong>（HISCOX 保險）</li>
+      <li>AI 同時優化數百條產線，每批疫苗<strong>多產兩萬劑</strong>（Pfizer）</li>
+    </ul>
+
+    <div class="key-message animate-in">
+      花 $1 買工具，要再花 $1-2 改組織，否則就是浪費。
+    </div>
+
+    <div class="source animate-in">來源：Opening Keynote &bull; After ROI — The Three Executive Conversations &bull; Getting Value From AI</div>
+  </div>
+
+  <!-- ═══════ SLIDE 3: 治理 ═══════ -->
+  <div class="slide" data-slide="3">
+    <div class="label animate-in">主題三</div>
+    <h2 class="slide-title animate-in">治理是重要的</h2>
+
+    <div class="stat-row animate-in">
+      <div class="stat-card stat-card--red">
+        <div class="hero-number">1,000+</div>
+        <div class="stat-label">AI Agent 在運作，CIO 完全不知道</div>
+      </div>
+      <div class="stat-card stat-card--gold">
+        <div class="hero-number">52%</div>
+        <div class="stat-label">AI 支出發生在 IT 預算以外</div>
+      </div>
+    </div>
+
+    <div class="slide-subtitle animate-in">
+      <p>一家歐洲電信公司的 CIO 說「我們還沒開始用 AI Agent」。Gartner 一查——公司內部已有<strong>超過 1,000 個 Agent</strong>，都是業務單位自己建的。</p>
+      <p>AI 能力飛速提升：三個月內從 <strong>47.6% 跳到 70.9%</strong>，已超過人類專家水準。</p>
+      <p>最極端的風險：Agent 自主將歐盟資料搬到美國雲端——追究的<strong>不是 IT，是 CEO</strong>。</p>
+    </div>
+
+    <div class="key-message animate-in">
+      Agent 不會等你準備好才擴散，治理要從現在開始。
+    </div>
+
+    <div class="source animate-in">來源：Rise of AI Agents — Strategic Imperatives for CIOs &bull; The CIO's Role in Scaling Agentic AI</div>
+  </div>
+
+  <!-- ═══════ SLIDE 4: 三件事帶回去 ═══════ -->
+  <div class="slide" data-slide="4">
+    <div class="label animate-in">行動建議</div>
+    <h2 class="slide-title animate-in">三個重要關鍵</h2>
+
+    <div class="takeaway-grid">
+      <div class="takeaway-card animate-in">
+        <div class="takeaway-num">1</div>
+        <div class="takeaway-body">
+          <h3>省時間 &ne; 省錢</h3>
+          <p>盤點目前的 AI 投資：哪些只停留在「省時間」？有沒有在部署之後，接著去動流程和組織？如果沒有，花的錢就只是買了一個「感覺有在用」的交代。</p>
+        </div>
+      </div>
+      <div class="takeaway-card animate-in">
+        <div class="takeaway-num">2</div>
+        <div class="takeaway-body">
+          <h3>組織必須改變</h3>
+          <p>AI 預算中有沒有編列 100-200% 的變革管理費用？我們打算用 AI 來「做什麼」——只讓同仁打報告快一點，還是改變服務模式、人力結構、甚至商業模式？</p>
+        </div>
+      </div>
+      <div class="takeaway-card animate-in">
+        <div class="takeaway-num">3</div>
+        <div class="takeaway-body">
+          <h3>治理刻不容緩</h3>
+          <p>公司現在有多少 AI Agent 在運作？我們知道嗎？誰在管？出事了誰負責？這不是 IT 的事，需要跨高管層的治理機制，從現在就開始。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SLIDE 5: CLOSING ═══════ -->
+  <div class="slide slide--closing" data-slide="5">
+    <p class="closing-quote animate-in">
+      AI 的競爭已經進入下半場：<br>
+      不是比誰先買工具，<br>
+      是比誰先<span class="highlight">敢動組織</span>。
+    </p>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<nav class="nav-bar">
+  <div class="nav-counter"><span class="current" id="navCurrent">1</span> / <span id="navTotal">6</span></div>
+  <div class="nav-dots" id="navDots"></div>
+  <div class="nav-arrows">
+    <button class="nav-btn" id="btnPrev" aria-label="上一頁">&#8592;</button>
+    <button class="nav-btn" id="btnNext" aria-label="下一頁">&#8594;</button>
+  </div>
+</nav>
+
+<script>
+(function () {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const progress = document.getElementById('progress');
+  const navCurrent = document.getElementById('navCurrent');
+  const dotsContainer = document.getElementById('navDots');
+  let current = 0;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(dot);
+  });
+
+  function goTo(index) {
+    if (index < 0 || index >= total) return;
+    slides[current].classList.remove('active');
+    dotsContainer.children[current].classList.remove('active');
+    current = index;
+    slides[current].classList.add('active');
+    dotsContainer.children[current].classList.add('active');
+    navCurrent.textContent = current + 1;
+    progress.style.width = ((current / (total - 1)) * 100) + '%';
+  }
+
+  document.getElementById('btnPrev').addEventListener('click', () => goTo(current - 1));
+  document.getElementById('btnNext').addEventListener('click', () => goTo(current + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      goTo(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goTo(current - 1);
+    }
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', (e) => {
+    const diff = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(diff) > 60) {
+      diff < 0 ? goTo(current + 1) : goTo(current - 1);
+    }
+  });
+
+  // Init
+  progress.style.width = '0%';
+})();
+</script>
+</body>
+</html>
