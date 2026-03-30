@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gartner 2026 — 組織改革重點分析</title>
+<!-- Base fonts (always needed) -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@400;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!-- Language fonts loaded on demand by JS -->
+<script>
+(function(){
+  var loaded = {};
+  var fonts = {
+    ja: 'family=Noto+Sans+JP:wght@300;400;500;700;900&family=Noto+Serif+JP:wght@400;700;900',
+    fr: 'family=Playfair+Display:wght@400;700;900',
+    th: 'family=Noto+Sans+Thai:wght@300;400;500;700;900&family=Noto+Serif+Thai:wght@400;700;900'
+  };
+  window.__loadLangFont = function(lang) {
+    if (loaded[lang] || !fonts[lang]) return;
+    loaded[lang] = true;
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?' + fonts[lang] + '&display=swap';
+    document.head.appendChild(link);
+  };
+})();
+</script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --washi: #F6F2EC;
+  --washi-warm: #EDE7DD;
+  --kinu: #FDFBF8;
+  --sumi: #1C1915;
+  --sumi-soft: #3D3830;
+  --sumi-muted: #8A8279;
+  --shu: #BE3134;
+  --shu-light: #D4514F;
+  --shu-ghost: rgba(190,49,52,0.06);
+  --shu-pale: rgba(190,49,52,0.12);
+  --ai: #2B6A72;
+  --ai-ghost: rgba(43,106,114,0.07);
+  --matcha: #4E7A52;
+  --matcha-ghost: rgba(78,122,82,0.07);
+  --kincha: #C48E3C;
+  --kincha-ghost: rgba(196,142,60,0.08);
+  --border: #DDD7CC;
+  --border-light: #E8E3DA;
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 24px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.08);
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--washi);
+  color: var(--sumi);
+  font-family: 'Noto Sans TC', 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body { overflow-x: hidden; }
+
+/* ── Noise texture overlay ── */
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 499;
+  pointer-events: none; opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+/* ── Scroll progress ── */
+#scroll-progress {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: var(--shu); z-index: 1000;
+  transform-origin: left; transition: none;
+}
+
+/* ── Sticky Nav ── */
+.sticky-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  padding: 0 clamp(24px, 4vw, 60px); height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(246,242,236,0.85); backdrop-filter: blur(16px) saturate(1.2);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.sticky-nav.scrolled {
+  border-bottom-color: var(--border);
+  box-shadow: 0 1px 12px rgba(0,0,0,0.04);
+}
+.nav-brand {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(0.9rem, 1.1vw, 1.05rem); font-weight: 700;
+  color: var(--sumi);
+}
+.nav-links { display: flex; gap: 6px; flex-wrap: wrap; }
+.nav-pill {
+  padding: 6px 16px; border-radius: 50px; border: none; cursor: pointer;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: clamp(0.72rem, 0.85vw, 0.82rem); font-weight: 500;
+  color: var(--sumi-muted); background: transparent;
+  transition: all 0.25s ease;
+}
+.nav-pill:hover { color: var(--sumi); background: var(--washi-warm); }
+.nav-pill:focus-visible { outline: 2px solid var(--shu); outline-offset: 2px; }
+.nav-pill.active { color: var(--shu); background: var(--shu-ghost); font-weight: 700; }
+
+/* ── Hero ── */
+.hero-section {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  padding: 80px clamp(24px, 6vw, 80px);
+  position: relative; overflow: hidden;
+}
+.hero-section::before {
+  content: ''; position: absolute;
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: min(600px, 70vw); height: min(600px, 70vw);
+  border: 1px solid var(--border); border-radius: 50%; opacity: 0.4;
+}
+.hero-section::after {
+  content: ''; position: absolute;
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: min(420px, 50vw); height: min(420px, 50vw);
+  border: 1px solid var(--border); border-radius: 50%; opacity: 0.25;
+}
+.hero-tag {
+  font-size: clamp(0.8rem, 1vw, 0.95rem);
+  letter-spacing: 0.25em; color: var(--shu);
+  font-weight: 500; margin-bottom: 28px; position: relative; z-index: 1;
+}
+.hero-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(3rem, 6.5vw, 5.8rem);
+  font-weight: 900; line-height: 1.2; letter-spacing: 0.03em;
+  color: var(--sumi); margin-bottom: 28px; position: relative; z-index: 1;
+}
+.hero-sub {
+  font-size: clamp(1.15rem, 1.8vw, 1.65rem);
+  color: var(--sumi-muted); font-weight: 400; margin-bottom: 16px;
+  position: relative; z-index: 1;
+}
+.hero-meta {
+  font-size: clamp(0.85rem, 1vw, 1rem);
+  color: var(--sumi-muted); position: relative; z-index: 1;
+}
+.hero-line {
+  width: 1px; height: 80px; background: var(--border);
+  margin-top: 48px; position: relative; z-index: 1;
+  transform-origin: top; animation: growDown 1.5s ease 1s both;
+}
+@keyframes growDown { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+/* ── Section ── */
+.content-section {
+  padding: clamp(80px, 12vh, 140px) clamp(24px, 6vw, 80px);
+  max-width: 1100px; margin: 0 auto;
+}
+.section-divider {
+  width: 40px; height: 3px; background: var(--shu);
+  margin-bottom: 20px; border-radius: 2px;
+}
+.section-tag {
+  font-size: clamp(0.82rem, 1vw, 0.95rem);
+  letter-spacing: 0.2em; color: var(--shu); font-weight: 500;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  font-weight: 900; line-height: 1.3; letter-spacing: 0.01em;
+  color: var(--sumi); margin-bottom: clamp(28px, 4vh, 48px);
+}
+.section-body {
+  font-size: clamp(1.2rem, 1.5vw, 1.5rem);
+  line-height: 1.9; color: var(--sumi-soft); max-width: 48em;
+}
+.section-body strong { color: var(--sumi); font-weight: 700; }
+.section-body p { margin-bottom: 1em; }
+
+/* ── Stat Cards ── */
+.stat-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: clamp(16px, 2vw, 24px); margin: clamp(28px, 4vh, 48px) 0;
+}
+.stat-card {
+  background: var(--kinu); border: 1px solid var(--border-light);
+  border-radius: 8px; padding: clamp(28px, 3vw, 40px);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s ease;
+  position: relative; overflow: hidden;
+}
+.stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 4px;
+}
+.stat-card--shu::before { background: var(--shu); }
+.stat-card--ai::before { background: var(--ai); }
+.stat-card--matcha::before { background: var(--matcha); }
+.stat-card--kincha::before { background: var(--kincha); }
+.stat-num {
+  font-family: 'Inter', sans-serif; font-weight: 900;
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 10px;
+}
+.stat-card--shu .stat-num { color: var(--shu); }
+.stat-card--ai .stat-num { color: var(--ai); }
+.stat-card--matcha .stat-num { color: var(--matcha); }
+.stat-card--kincha .stat-num { color: var(--kincha); }
+.stat-label {
+  font-size: clamp(1rem, 1.25vw, 1.25rem);
+  color: var(--sumi-soft); line-height: 1.6;
+}
+
+/* ── Key Message ── */
+.key-message {
+  margin: clamp(28px, 4vh, 48px) 0;
+  padding: clamp(24px, 3vw, 36px);
+  border-left: 4px solid var(--shu);
+  background: var(--shu-ghost); border-radius: 0 8px 8px 0;
+  font-size: clamp(1.2rem, 1.5vw, 1.5rem);
+  font-weight: 700; line-height: 1.8; color: var(--sumi);
+}
+
+/* ── Duo Cards ── */
+.duo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2.5vw, 28px); margin: clamp(28px, 4vh, 44px) 0; }
+@media (max-width: 720px) { .duo-grid { grid-template-columns: 1fr; } }
+.duo-card {
+  background: var(--kinu); border: 1px solid var(--border-light);
+  border-radius: 8px; padding: clamp(24px, 3vw, 36px);
+  box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
+}
+.duo-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; }
+.duo-card--stop::before { background: var(--shu); }
+.duo-card--go::before { background: var(--matcha); }
+.duo-card h3 {
+  font-size: clamp(1.15rem, 1.4vw, 1.4rem); font-weight: 700;
+  margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+}
+.duo-card--stop h3 { color: var(--shu); }
+.duo-card--go h3 { color: var(--matcha); }
+.duo-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.duo-list li {
+  font-size: clamp(1.08rem, 1.3vw, 1.3rem); line-height: 1.8;
+  color: var(--sumi-soft); padding-left: 26px; position: relative;
+}
+.duo-list li strong { color: var(--sumi); }
+.duo-card--stop .duo-list li::before { content: '\2717'; position: absolute; left: 0; color: var(--shu); font-weight: 700; }
+.duo-card--go .duo-list li::before { content: '\2713'; position: absolute; left: 0; color: var(--matcha); font-weight: 700; }
+
+/* ── Table Row ── */
+.info-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(12px, 1.8vw, 20px); margin: clamp(20px, 3vh, 36px) 0;
+}
+@media (max-width: 600px) { .info-grid { grid-template-columns: 1fr; } }
+.info-cell {
+  background: var(--kinu); border: 1px solid var(--border-light);
+  border-radius: 8px; padding: clamp(20px, 2.5vw, 30px);
+  box-shadow: var(--shadow-sm);
+}
+.info-cell-label {
+  font-size: clamp(0.88rem, 1vw, 1rem);
+  color: var(--sumi-muted); letter-spacing: 0.1em; font-weight: 500;
+  margin-bottom: 8px;
+}
+.info-cell-value {
+  font-size: clamp(1.15rem, 1.4vw, 1.4rem);
+  color: var(--sumi); line-height: 1.65; font-weight: 500;
+}
+.info-cell-value .accent { color: var(--shu); font-weight: 800; font-family: 'Inter', sans-serif; }
+
+/* ── Takeaway Cards ── */
+.takeaway-list { display: flex; flex-direction: column; gap: clamp(14px, 2vh, 22px); }
+.takeaway-card {
+  display: flex; gap: clamp(18px, 2.5vw, 28px); align-items: flex-start;
+  background: var(--kinu); border: 1px solid var(--border-light);
+  border-left: 4px solid var(--shu);
+  border-radius: 8px; padding: clamp(22px, 2.8vw, 34px);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.takeaway-card:hover { transform: translateX(4px); box-shadow: var(--shadow-md); }
+.takeaway-num {
+  flex-shrink: 0; width: 52px; height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--shu-ghost); border-radius: 8px;
+  font-family: 'Inter', sans-serif; font-size: 1.6rem;
+  font-weight: 900; color: var(--shu);
+}
+.takeaway-card h3 {
+  font-size: clamp(1.25rem, 1.55vw, 1.5rem); font-weight: 700;
+  margin-bottom: 6px; color: var(--sumi);
+}
+.takeaway-card p {
+  font-size: clamp(1.05rem, 1.3vw, 1.3rem);
+  line-height: 1.8; color: var(--sumi-soft);
+}
+
+/* ── Closing ── */
+.closing-section {
+  min-height: 70vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  padding: clamp(80px, 12vh, 140px) clamp(24px, 6vw, 80px);
+  position: relative;
+}
+.closing-section::before {
+  content: ''; position: absolute; top: 0;
+  left: 50%; transform: translateX(-50%);
+  width: 60px; height: 1px; background: var(--border);
+}
+.closing-text {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(1.8rem, 3.5vw, 3.2rem);
+  font-weight: 700; line-height: 1.65; max-width: 14em;
+  color: var(--sumi);
+}
+.closing-text .hl { color: var(--shu); }
+.closing-src {
+  margin-top: 48px; font-size: clamp(0.82rem, 0.95vw, 0.92rem);
+  color: var(--sumi-muted);
+}
+
+/* ── Source line ── */
+.src-line {
+  margin-top: clamp(20px, 3vh, 36px);
+  font-size: clamp(0.78rem, 0.9vw, 0.88rem);
+  color: var(--sumi-muted);
+}
+
+/* ── Reveal Animation ── */
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.25,0.1,0.25,1), transform 0.7s cubic-bezier(0.25,0.1,0.25,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ── Full-width divider between sections ── */
+.section-sep {
+  max-width: 1100px; margin: 0 auto;
+  padding: 0 clamp(24px, 6vw, 80px);
+}
+.section-sep-line {
+  height: 1px; background: var(--border);
+}
+
+/* ── Language Toggle ── */
+.lang-toggle {
+  display: flex; gap: 0; border: 1px solid var(--border); border-radius: 50px; overflow: hidden;
+  background: var(--kinu);
+}
+.lang-btn {
+  padding: 6px 18px; border: none; cursor: pointer;
+  font-family: 'Noto Sans TC', 'Noto Sans JP', sans-serif;
+  font-size: clamp(0.75rem, 0.88vw, 0.85rem); font-weight: 500;
+  color: var(--sumi-muted); background: transparent;
+  transition: all 0.25s ease;
+}
+.lang-btn.active { color: var(--kinu); background: var(--sumi); font-weight: 700; }
+.lang-btn:not(.active):hover { color: var(--sumi); background: var(--washi-warm); }
+.lang-btn:focus-visible { outline: 2px solid var(--shu); outline-offset: 2px; }
+
+/* ── JP font override ── */
+.lang-ja { font-family: 'Noto Sans JP', 'Inter', sans-serif; }
+.lang-ja .hero-title,
+.lang-ja .section-title,
+.lang-ja .closing-text { font-family: 'Noto Serif JP', serif; }
+
+/* ── FR font override ── */
+.lang-fr { font-family: 'Inter', 'Noto Sans TC', sans-serif; }
+.lang-fr .hero-title,
+.lang-fr .section-title,
+.lang-fr .closing-text { font-family: 'Playfair Display', serif; }
+
+/* ── TH font override ── */
+.lang-th { font-family: 'Noto Sans Thai', 'Inter', sans-serif; line-height: 2; }
+.lang-th .hero-title,
+.lang-th .section-title,
+.lang-th .closing-text { font-family: 'Noto Serif Thai', serif; }
+
+/* ── Responsive Nav ── */
+@media (max-width: 1100px) {
+  .nav-links { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; max-width: 50vw; flex-wrap: nowrap; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-pill { white-space: nowrap; flex-shrink: 0; }
+}
+@media (max-width: 720px) {
+  .sticky-nav { height: auto; padding: 10px clamp(16px, 4vw, 24px); flex-wrap: wrap; gap: 8px; }
+  .nav-links { max-width: 100%; order: 3; width: 100%; justify-content: flex-start; }
+  .lang-toggle { order: 2; }
+  .nav-brand { order: 1; }
+  .lang-btn { padding: 10px 18px; min-height: 44px; }
+  .nav-pill { padding: 10px 16px; min-height: 44px; }
+}
+
+/* ── Tooltip ── */
+.tip {
+  position: relative; cursor: help;
+  border-bottom: 1px dotted var(--shu); color: inherit;
+}
+.tip .tip-text {
+  visibility: hidden; opacity: 0;
+  position: absolute; bottom: calc(100% + 10px); left: 50%;
+  transform: translateX(-50%); z-index: 600;
+  background: var(--sumi); color: var(--kinu);
+  padding: 10px 16px; border-radius: 8px;
+  font-size: clamp(0.82rem, 0.95vw, 0.92rem); font-weight: 400;
+  line-height: 1.6; width: max-content; max-width: 300px;
+  box-shadow: var(--shadow-lg);
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none;
+}
+.tip .tip-text::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: var(--sumi);
+}
+.tip:hover .tip-text,
+.tip:focus-within .tip-text,
+.tip:focus .tip-text { visibility: visible; opacity: 1; }
+.tip:focus { outline: 2px solid var(--shu); outline-offset: 2px; border-radius: 2px; }
+
+/* ── Back to Top ── */
+.back-top {
+  position: fixed; bottom: 28px; right: 28px; z-index: 500;
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--kinu);
+  box-shadow: var(--shadow-md); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; color: var(--sumi-soft);
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease;
+  pointer-events: none;
+}
+.back-top.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.back-top:hover { background: var(--washi-warm); color: var(--sumi); }
+.back-top:focus-visible { outline: 2px solid var(--shu); outline-offset: 2px; }
+
+/* ── Highlight Section (full-width accent band) ── */
+.section--highlight {
+  background: var(--shu-ghost);
+  border-top: 1px solid var(--shu-pale);
+  border-bottom: 1px solid var(--shu-pale);
+  padding: clamp(60px, 10vh, 120px) clamp(24px, 6vw, 80px);
+  max-width: 100%; margin: 0;
+}
+.section--highlight .content-inner {
+  max-width: 1100px; margin: 0 auto;
+}
+.section--highlight .section-divider { background: var(--shu); width: 60px; }
+.section--highlight .key-message {
+  background: rgba(190,49,52,0.08); border-left-width: 5px;
+  font-size: clamp(1.35rem, 1.7vw, 1.7rem);
+}
+
+/* ── Side-by-Side Layout ── */
+.split {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 4vw, 56px); align-items: start;
+  margin: clamp(28px, 4vh, 48px) 0;
+}
+@media (max-width: 800px) { .split { grid-template-columns: 1fr; } }
+.split .stat-grid { margin: 0; }
+
+/* ── Keyboard hint ── */
+.kbd-hint {
+  position: fixed; bottom: 28px; left: 28px; z-index: 500;
+  font-size: 0.75rem; color: var(--sumi-muted);
+  opacity: 0; transition: opacity 0.5s ease;
+}
+.kbd-hint.show { opacity: 1; }
+.kbd-hint kbd {
+  display: inline-block; padding: 2px 7px; border-radius: 4px;
+  border: 1px solid var(--border); background: var(--kinu);
+  font-family: 'Inter', sans-serif; font-size: 0.7rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
+/* ── Horizontal Comparison (alternate duo layout for S6) ── */
+.compare-stack { display: flex; flex-direction: column; gap: clamp(16px, 2.5vh, 24px); margin: clamp(28px, 4vh, 44px) 0; }
+.compare-row {
+  display: grid; grid-template-columns: auto 1fr; gap: 0;
+  background: var(--kinu); border: 1px solid var(--border-light);
+  border-radius: 8px; box-shadow: var(--shadow-sm); overflow: hidden;
+}
+.compare-label {
+  writing-mode: vertical-rl; text-orientation: mixed;
+  padding: clamp(12px, 1.5vw, 20px) clamp(10px, 1.2vw, 16px);
+  font-size: clamp(0.82rem, 1vw, 0.95rem); font-weight: 700;
+  letter-spacing: 0.1em; display: flex; align-items: center; justify-content: center;
+}
+.compare-row--stop .compare-label { background: var(--shu); color: var(--kinu); }
+.compare-row--go .compare-label { background: var(--matcha); color: var(--kinu); }
+.compare-content { padding: clamp(20px, 2.5vw, 30px); }
+.compare-content ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.compare-content li {
+  font-size: clamp(1.08rem, 1.3vw, 1.3rem); line-height: 1.8;
+  color: var(--sumi-soft); padding-left: 26px; position: relative;
+}
+.compare-content li strong { color: var(--sumi); }
+.compare-row--stop .compare-content li::before { content: '\2717'; position: absolute; left: 0; color: var(--shu); font-weight: 700; }
+.compare-row--go .compare-content li::before { content: '\2713'; position: absolute; left: 0; color: var(--matcha); font-weight: 700; }
+@media (max-width: 600px) {
+  .compare-label { writing-mode: horizontal-tb; padding: 10px 16px; }
+  .compare-row { grid-template-columns: 1fr; }
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transition: none; opacity: 1; transform: none; }
+  .slide.active .anim { animation: none; }
+  .stat-card, .takeaway-card, .back-top { transition: none; }
+  .hero-line { animation: none; transform: scaleY(1); }
+  html { scroll-behavior: auto; }
+}
+
+/* ── Footer ── */
+.site-footer {
+  padding: 40px clamp(24px, 6vw, 80px);
+  text-align: center; font-size: 0.85rem; color: var(--sumi-muted);
+  border-top: 1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+/* ── Glossary tooltips per language ── */
+const GLOSSARY = {
+  zh: { IAM:'身份與存取管理 (Identity and Access Management)，控制誰能存取什麼資源', RACI:'責任分派矩陣：負責(R)、當責(A)、諮詢(C)、知會(I)', deflection:'Agent 自動處理而不需要人類介入的比例', supervision:'人類花在監督 AI Agent 決策的時間' },
+  ja: { IAM:'ID・アクセス管理（Identity and Access Management）：誰が何にアクセスできるかを制御', RACI:'責任分担マトリクス：実行責任(R)・説明責任(A)・相談先(C)・報告先(I)', deflection:'人間の介入なしに Agent が自動処理した割合', supervision:'AI Agent の判断を監視するために人間が費やす時間' },
+  fr: { IAM:'Gestion des Identités et des Accès — contrôle qui peut accéder à quelles ressources', RACI:'Matrice de responsabilités : Responsable, Approbateur, Consulté, Informé', deflection:'Proportion de requêtes traitées par l\'Agent sans intervention humaine', supervision:'Temps passé par les humains à superviser les décisions de l\'Agent IA' },
+  th: { IAM:'การจัดการตัวตนและการเข้าถึง (Identity and Access Management) ควบคุมว่าใครเข้าถึงทรัพยากรใดได้', RACI:'เมทริกซ์ความรับผิดชอบ: ผู้รับผิดชอบ(R), ผู้อนุมัติ(A), ผู้ให้คำปรึกษา(C), ผู้รับทราบ(I)', deflection:'สัดส่วนที่ Agent จัดการอัตโนมัติโดยไม่ต้องมีมนุษย์เข้ามาช่วย', supervision:'เวลาที่มนุษย์ใช้ในการตรวจสอบการตัดสินใจของ AI Agent' },
+};
+
+/* ── i18n data ── */
+const T = {
+  zh: {
+    nav: ['首頁','背景','改革一','改革二','改革三','改革四','改革五','改革六','總結'],
+    heroTag: 'GARTNER CIO LEADERSHIP FORUM 2026 · OPENING KEYNOTE',
+    heroTitle: ['組織改革','重點分析'],
+    heroSub: 'AI After the Hype — Scaling Human + Machine Value',
+    heroMeta: '講者：Nate Suda, Senior Director Analyst, Gartner',
+    s1: { tag:'背景', title:'CEO 的期待已根本轉變',
+      stats: [{v:89,s:'%',l:'CEO 正在加碼 AI 投資',c:'shu'},{v:74,s:'%',l:'董事會鼓勵承擔更大技術風險（歷年首見）',c:'shu'},{v:null,l:'2029 年全球 AI 支出預測',c:'kincha',fixed:'$3.5 兆'}],
+      body:'<p>CEO 不再問「這個 AI 專案的 ROI 是什麼」，<br/>而是問<strong>「我們如何在 AI 塑造的經濟中競爭」</strong>。</p><p>組織改革的驅動力已從 IT 部門上升到經營策略層級。</p>',
+      src:'來源：2026 Gartner CEO and Senior Executive Survey · 2026 Gartner Board of Directors Survey'},
+    s2: { tag:'改革一', title:'從「專案思維」到「產品組合思維」',
+      body1:'<p>規模化不是找到一個最佳 use case，而是同時部署<strong>數十到數百個中小型 use cases</strong>，降低每個新專案的邊際成本。</p>',
+      stats:[{v:1.3,s:'x',l:'可重用 operating patterns 的 CEO 價值倍數',c:'shu'},{v:1.4,s:'x',l:'Deploy then Redesign 的 CEO 價值倍數',c:'shu'}],
+      body2:'<p>組織需要建立 <strong>AI Assembly Line（AI 組裝線）</strong>：可重用的整合模式、prompt templates、shared tools，並追蹤重用率和上線時間。</p>',
+      keyMsg:'案例：NHS 英國建立中央 AI 計畫鼓勵模型重用，AI 工具現已輔助全國約 1/3 胸部 X 光（240 萬次掃描）。',
+      src:'來源：Opening Keynote — Diamond Chain Navigator 框架'},
+    s3: { tag:'改革二', title:'先部署，後重設計',
+      stats:[{v:1.4,s:'x',l:'Deploy then Redesign 的 CEO 認可價值倍數',c:'shu'}],
+      body:'<p>傳統做法：先規劃 → 再建置 → 再推動變革。<strong>這太慢了。</strong></p><p>正確做法：<strong>先將 AI 部署到 live workflows</strong>，觀察實際使用情況後，再根據真實數據重新設計流程。</p><p>不要追求完美設計再部署——讓現實引導改革方向。</p>',
+      keyMsg:'先上線、再優化，讓數據決定怎麼改組織。',
+      src:'來源：Opening Keynote — Peak Practice: Deploy then Redesign'},
+    s4: { tag:'改革三', title:'Agent 部署需要新的治理架構',
+      grid:[{lb:'做法',pre:'為 Agent 建立獨立 ',tip:'IAM',tipLabel:'IAM Identity',post:''},{lb:'效果',vl:'<span class="accent">1.4x</span> 價值提升（42% CIO 在做）'},{lb:'做法',pre:'建立 ',tip:'RACI',tipLabel:'RACI Matrix',post:''},{lb:'注意',vl:'<strong>不要</strong>把 Agent 放入組織架構圖'}],
+      body:'<p>Agent 放入 Org Chart 會傳達<strong>「替代人類」的錯誤訊號</strong>，引發不必要的 distrust。</p><p>Human oversight 應該是<strong>過渡策略</strong>（用於釐清 agent decision rights），不是永久審批機制。</p><p>組織文化是瓶頸：<strong>扁平決策</strong>的組織較容易授權 agent 自主性；層級化組織則更困難。</p>',
+      src:'來源：Opening Keynote — Agent Autonomy & RACI'},
+    s5: { tag:'改革四', title:'終結「AI 保母」模式',
+      stop:{ h:'\u26D4 必須停止', items:['追蹤 agent deflection rate（53% 在做）','追蹤 human supervision time（52% 在做）','將 human-in-the-loop 當作永久策略']},
+      go:{ h:'\u2705 正確做法', items:['Human oversight 作為<strong>過渡策略</strong>','為 Agent 建立獨立 IAM Identity','建立 Agent RACI Matrix 明確權責']},
+      keyMsg:'Human Approval Factory（AI 保母模式）是 Gartner 明確指出的 CEO 價值殺手。',
+      src:'來源：Opening Keynote — CEO Value Killers'},
+    s6: { tag:'改革五', title:'從「做得更快」到「做以前做不到的事」',
+      stop:{ h:'\u26D4 三項無效做法', items:['量測 AI 工具使用頻率（70% 在做）','過早更新角色與績效管理（56%）','報告 AI 節省的時間（63%）']},
+      go:{ h:'\u2705 最高價值做法（均 1.5x）', items:['<strong>壓縮 Time to Mastery</strong> — 用 AI 加速新人養成','<strong>擴展 Role Range</strong> — 讓資深員工跨入相鄰領域']},
+      body:'<p><strong>74%</strong> CFO 認為 AI 省了時間，但僅 <strong>5%</strong> 認為省了錢。衡量「省時間」無法驅動價值。</p>',
+      keyMsg:'案例：HISCOX 保險用 AI 訓練模擬器，承保人認證失敗率降低 71%。',
+      src:'來源：Opening Keynote — Capability Amplifiers'},
+    s7: { tag:'改革六', title:'紀律性退出：敢砍才是改革',
+      body:'<p>組織改革不只是「做新的事」，也包括<strong>果斷停掉不成功的事</strong>。</p><p>Gartner 建議在投入前即預設退出條件，條件觸發時果斷行動：</p>',
+      stats:[{v:90,s:'',l:'無明確 production 路徑 → 暫停',c:'shu',unit:' 天'},{v:500,s:'',l:'工程投入無結果 → 暫停',c:'shu',unit:' hr'},{v:3,s:'',l:'business partner 未承諾 → 暫停',c:'shu',unit:' 個'}],
+      keyMsg:'不設退場紀律，等於放任沉沒成本無限擴大。',
+      src:'來源：Opening Keynote — Turnaround Criteria'},
+    s8: { tag:'總結', title:'六大改革方向',
+      items:[
+        {t:'管理思維要改',d:'從專案管理 → 產品組合管理，建立 AI Assembly Line'},
+        {t:'部署邏輯要改',d:'先上線再優化（Deploy then Redesign），不是先設計再推動'},
+        {t:'治理架構要改',d:'Agent 需要獨立 IAM Identity 和 RACI Matrix'},
+        {t:'員工發展要改',d:'從「做更快」到「做更多種事」— 壓縮養成期、擴展角色範圍'},
+        {t:'衡量方式要改',d:'停止量使用率和省時間，改量能力擴展'},
+        {t:'退場紀律要改',d:'預設退出條件（90 天 / 500 小時 / 3 個合作方），果斷止損'},
+      ]},
+    closing: ['組織改革不是 AI 部署的「後續步驟」，','而是 AI 創造價值的','前提條件','。'],
+    footer: 'Gartner CIO Leadership Forum 2026 — 組織改革重點分析',
+  },
+  ja: {
+    nav: ['トップ','背景','改革 1','改革 2','改革 3','改革 4','改革 5','改革 6','まとめ'],
+    heroTag: 'GARTNER CIO LEADERSHIP FORUM 2026 · OPENING KEYNOTE',
+    heroTitle: ['組織改革','重点分析'],
+    heroSub: 'AI After the Hype — Scaling Human + Machine Value',
+    heroMeta: '講演者：Nate Suda, Senior Director Analyst, Gartner',
+    s1: { tag:'背景', title:'CEO の期待は根本的に変化した',
+      stats: [{v:89,s:'%',l:'CEO が AI 投資を増額中',c:'shu'},{v:74,s:'%',l:'取締役会がより大きな技術リスクを推奨（過去最高）',c:'shu'},{v:null,l:'2029 年の世界 AI 支出予測',c:'kincha',fixed:'$3.5 兆'}],
+      body:'<p>CEO はもはや「この AI プロジェクトの ROI は何か」とは聞かない。<br/>問うているのは<strong>「AI が形作る経済の中でどう競争するか」</strong>。</p><p>組織改革の原動力は IT 部門から経営戦略レベルに移行した。</p>',
+      src:'出典：2026 Gartner CEO and Senior Executive Survey · 2026 Gartner Board of Directors Survey'},
+    s2: { tag:'改革 1', title:'「プロジェクト思考」から「ポートフォリオ思考」へ',
+      body1:'<p>スケーリングとは最適なユースケースを一つ見つけることではなく、<strong>数十から数百の中小規模ユースケース</strong>を同時に展開し、新規案件の限界コストを下げることである。</p>',
+      stats:[{v:1.3,s:'x',l:'再利用可能な operating patterns の CEO 価値倍率',c:'shu'},{v:1.4,s:'x',l:'Deploy then Redesign の CEO 価値倍率',c:'shu'}],
+      body2:'<p>組織は <strong>AI Assembly Line（AI 組立ライン）</strong>を構築する必要がある：再利用可能な統合パターン、プロンプトテンプレート、共有ツールを整備し、再利用率と本番投入時間を追跡する。</p>',
+      keyMsg:'事例：英国 NHS は中央 AI プログラムでモデル再利用を推進。AI ツールは現在、全国の胸部 X 線の約 1/3（240 万回のスキャン）を支援。',
+      src:'出典：Opening Keynote — Diamond Chain Navigator フレームワーク'},
+    s3: { tag:'改革 2', title:'まず導入し、後から再設計する',
+      stats:[{v:1.4,s:'x',l:'Deploy then Redesign の CEO 認定価値倍率',c:'shu'}],
+      body:'<p>従来のやり方：計画 → 構築 → 変革推進。<strong>これでは遅すぎる。</strong></p><p>正しいやり方：<strong>まず AI を実際のワークフローに導入し</strong>、実際の使用状況を観察してから、真のデータに基づきプロセスを再設計する。</p><p>完璧な設計を待つな——現実に改革の方向を導かせよ。</p>',
+      keyMsg:'まず稼働させ、次に最適化する。データに組織改革の方法を決めさせよ。',
+      src:'出典：Opening Keynote — Peak Practice: Deploy then Redesign'},
+    s4: { tag:'改革 3', title:'Agent 導入には新しいガバナンス体制が必要',
+      grid:[{lb:'施策',pre:'Agent に独立した ',tip:'IAM',tipLabel:'IAM Identity',post:' を付与'},{lb:'効果',vl:'<span class="accent">1.4x</span> 価値向上（42% の CIO が実施中）'},{lb:'施策',pre:'',tip:'RACI',tipLabel:'RACI マトリクス',post:'を構築'},{lb:'注意',vl:'Agent を組織図に<strong>入れてはならない</strong>'}],
+      body:'<p>Agent を組織図に入れると<strong>「人間の代替」という誤ったシグナル</strong>を送り、不必要な不信感を招く。</p><p>Human oversight は<strong>移行戦略</strong>（Agent の decision rights を明確にするため）であり、恒久的な承認メカニズムではない。</p><p>組織文化がボトルネック：<strong>フラットな意思決定</strong>組織は Agent への自律性委譲が容易だが、階層型組織はより困難。</p>',
+      src:'出典：Opening Keynote — Agent Autonomy & RACI'},
+    s5: { tag:'改革 4', title:'「AI ベビーシッター」モデルを終わらせる',
+      stop:{ h:'\u26D4 やめるべきこと', items:['Agent deflection rate の追跡（53% が実施中）','Human supervision time の追跡（52% が実施中）','Human-in-the-loop を恒久的戦略とすること']},
+      go:{ h:'\u2705 正しいやり方', items:['Human oversight を<strong>移行戦略</strong>として活用','Agent に独立した IAM Identity を付与','Agent RACI マトリクスで責任を明確化']},
+      keyMsg:'Human Approval Factory（AI ベビーシッターモデル）は、Gartner が明確に指摘した CEO 価値キラーである。',
+      src:'出典：Opening Keynote — CEO Value Killers'},
+    s6: { tag:'改革 5', title:'「速くやる」から「今までできなかったことをやる」へ',
+      stop:{ h:'\u26D4 3 つの無効な施策', items:['AI ツール使用頻度の測定（70% が実施中）','役割と業績管理の早すぎる更新（56%）','AI による時間節約の報告（63%）']},
+      go:{ h:'\u2705 最高価値の施策（いずれも 1.5x）', items:['<strong>Time to Mastery の圧縮</strong> — AI で新人育成を加速','<strong>Role Range の拡張</strong> — シニア人材を隣接領域へ']},
+      body:'<p><strong>74%</strong> の CFO は AI が時間を節約したと考えているが、<strong>わずか 5%</strong> がコスト削減につながったと考えている。「時間節約」の測定では価値は生まれない。</p>',
+      keyMsg:'事例：HISCOX 保険は AI トレーニングシミュレーターにより、引受人の認定不合格率を 71% 削減。',
+      src:'出典：Opening Keynote — Capability Amplifiers'},
+    s7: { tag:'改革 6', title:'規律ある撤退：やめる勇気こそ改革',
+      body:'<p>組織改革とは「新しいことを始める」だけでなく、<strong>成功しないものを果断に止める</strong>ことでもある。</p><p>Gartner は投入前に撤退条件を設定し、条件が満たされたら果断に行動することを推奨：</p>',
+      stats:[{v:90,s:'',l:'明確な production パスがない → 一時停止',c:'shu',unit:' 日'},{v:500,s:'',l:'エンジニアリング投入で成果なし → 一時停止',c:'shu',unit:' hr'},{v:3,s:'',l:'ビジネスパートナーが未コミット → 一時停止',c:'shu',unit:' 件'}],
+      keyMsg:'撤退の規律がなければ、サンクコストの無限拡大を放置しているのと同じである。',
+      src:'出典：Opening Keynote — Turnaround Criteria'},
+    s8: { tag:'まとめ', title:'6 つの改革の方向性',
+      items:[
+        {t:'マネジメント思考の転換',d:'プロジェクト管理 → ポートフォリオ管理、AI Assembly Line の構築'},
+        {t:'導入ロジックの転換',d:'まず稼働してから最適化（Deploy then Redesign）、設計してから推進するのではない'},
+        {t:'ガバナンス体制の転換',d:'Agent には独立した IAM Identity と RACI マトリクスが必要'},
+        {t:'人材育成の転換',d:'「速くやる」から「多様なことをやる」へ — 育成期間の圧縮、役割範囲の拡張'},
+        {t:'測定方法の転換',d:'使用率と時間節約の測定をやめ、能力拡張を測定する'},
+        {t:'撤退規律の転換',d:'撤退条件を事前設定（90 日 / 500 時間 / 3 パートナー）、果断に損切り'},
+      ]},
+    closing: ['組織改革は AI 導入の「次のステップ」ではなく、','AI が価値を生む','前提条件','である。'],
+    footer: 'Gartner CIO Leadership Forum 2026 — 組織改革 重点分析',
+  },
+  fr: {
+    nav: ['Accueil','Contexte','Réforme 1','Réforme 2','Réforme 3','Réforme 4','Réforme 5','Réforme 6','Synthèse'],
+    heroTag: 'GARTNER CIO LEADERSHIP FORUM 2026 · OPENING KEYNOTE',
+    heroTitle: ['Réforme','Organisationnelle'],
+    heroSub: 'AI After the Hype — Scaling Human + Machine Value',
+    heroMeta: 'Intervenant : Nate Suda, Senior Director Analyst, Gartner',
+    s1: { tag:'Contexte', title:'Les attentes des CEO ont fondamentalement changé',
+      stats: [{v:89,s:'%',l:'des CEO augmentent leurs investissements en IA',c:'shu'},{v:74,s:'%',l:'des conseils d\'administration encouragent une prise de risque technologique accrue (un record)',c:'shu'},{v:null,l:'Dépenses mondiales en IA prévues pour 2029',c:'kincha',fixed:'3 500 Mds $'}],
+      body:'<p>Les CEO ne demandent plus « quel est le ROI de ce projet IA ».<br/>Ils demandent <strong>« comment être compétitif dans une économie façonnée par l\'IA »</strong>.</p><p>Le moteur de la transformation organisationnelle est passé du département IT au niveau stratégique.</p>',
+      src:'Source : 2026 Gartner CEO and Senior Executive Survey · 2026 Gartner Board of Directors Survey'},
+    s2: { tag:'Réforme 1', title:'Du « mode projet » au « mode portefeuille »',
+      body1:'<p>Passer à l\'échelle ne signifie pas trouver le cas d\'usage parfait, mais déployer simultanément <strong>des dizaines voire des centaines de cas d\'usage de taille moyenne</strong>, réduisant le coût marginal de chaque nouveau projet.</p>',
+      stats:[{v:1.3,s:'x',l:'Valeur CEO des operating patterns réutilisables',c:'shu'},{v:1.4,s:'x',l:'Valeur CEO du Deploy then Redesign',c:'shu'}],
+      body2:'<p>L\'organisation doit construire une <strong>AI Assembly Line (chaîne de montage IA)</strong> : modèles d\'intégration réutilisables, templates de prompts, outils partagés, en suivant le taux de réutilisation et le délai de mise en production.</p>',
+      keyMsg:'Exemple : le NHS britannique a lancé un programme IA centralisé encourageant la réutilisation des modèles. Les outils IA assistent désormais environ 1/3 des radiographies thoraciques du pays (2,4 millions de scanners).',
+      src:'Source : Opening Keynote — Cadre Diamond Chain Navigator'},
+    s3: { tag:'Réforme 2', title:'Déployer d\'abord, reconcevoir ensuite',
+      stats:[{v:1.4,s:'x',l:'Valeur CEO reconnue du Deploy then Redesign',c:'shu'}],
+      body:'<p>L\'approche traditionnelle : planifier → construire → conduire le changement. <strong>C\'est trop lent.</strong></p><p>La bonne approche : <strong>déployer l\'IA dans les workflows réels d\'abord</strong>, observer l\'utilisation effective, puis reconcevoir les processus sur la base de données réelles.</p><p>Ne pas attendre la conception parfaite — laisser la réalité guider la direction de la réforme.</p>',
+      keyMsg:'D\'abord en production, ensuite l\'optimisation. Laissez les données décider comment transformer l\'organisation.',
+      src:'Source : Opening Keynote — Peak Practice: Deploy then Redesign'},
+    s4: { tag:'Réforme 3', title:'Le déploiement d\'Agents nécessite une nouvelle gouvernance',
+      grid:[{lb:'Action',pre:'Attribuer aux Agents une identité ',tip:'IAM',tipLabel:'IAM',post:' indépendante'},{lb:'Résultat',vl:'<span class="accent">1.4x</span> d\'augmentation de valeur (42 % des CIO le font)'},{lb:'Action',pre:'Construire une matrice ',tip:'RACI',tipLabel:'RACI',post:' des Agents'},{lb:'Attention',vl:'<strong>Ne pas</strong> placer les Agents dans l\'organigramme'}],
+      body:'<p>Placer les Agents dans l\'organigramme envoie le <strong>mauvais signal de « remplacement humain »</strong>, provoquant une méfiance inutile.</p><p>La supervision humaine doit être une <strong>stratégie de transition</strong> (pour clarifier les droits de décision des agents), pas un mécanisme d\'approbation permanent.</p><p>La culture organisationnelle est le goulot d\'étranglement : les organisations à <strong>prise de décision plate</strong> délèguent plus facilement l\'autonomie aux agents ; les organisations hiérarchiques y parviennent difficilement.</p>',
+      src:'Source : Opening Keynote — Agent Autonomy & RACI'},
+    s5: { tag:'Réforme 4', title:'En finir avec le modèle « baby-sitter IA »',
+      stop:{ h:'\u26D4 À arrêter', items:['Suivre le taux de deflection des agents (53 % le font)','Suivre le temps de supervision humaine (52 % le font)','Considérer le human-in-the-loop comme stratégie permanente']},
+      go:{ h:'\u2705 Bonnes pratiques', items:['La supervision humaine comme <strong>stratégie de transition</strong>','Attribuer aux Agents une identité IAM indépendante','Construire une matrice RACI des Agents avec responsabilités claires']},
+      keyMsg:'La Human Approval Factory (modèle baby-sitter IA) est explicitement identifiée par Gartner comme un destructeur de valeur CEO.',
+      src:'Source : Opening Keynote — CEO Value Killers'},
+    s6: { tag:'Réforme 5', title:'De « faire plus vite » à « faire ce qui était impossible »',
+      stop:{ h:'\u26D4 3 pratiques inefficaces', items:['Mesurer la fréquence d\'utilisation des outils IA (70 % le font)','Mettre à jour prématurément les rôles et la gestion de performance (56 %)','Rapporter le temps économisé par l\'IA (63 %)']},
+      go:{ h:'\u2705 Pratiques à plus haute valeur (1.5x chacune)', items:['<strong>Compresser le Time to Mastery</strong> — accélérer la montée en compétence avec l\'IA','<strong>Élargir le Role Range</strong> — permettre aux seniors d\'intervenir dans des domaines adjacents']},
+      body:'<p><strong>74 %</strong> des CFO estiment que l\'IA a fait gagner du temps, mais seulement <strong>5 %</strong> pensent qu\'elle a réduit les coûts. Mesurer « le temps gagné » ne crée pas de valeur.</p>',
+      keyMsg:'Exemple : HISCOX Assurance a utilisé un simulateur de formation IA, réduisant le taux d\'échec à la certification des souscripteurs de 71 %.',
+      src:'Source : Opening Keynote — Capability Amplifiers'},
+    s7: { tag:'Réforme 6', title:'Savoir arrêter : la discipline du retrait',
+      body:'<p>La réforme organisationnelle ne consiste pas seulement à « lancer de nouvelles initiatives », mais aussi à <strong>arrêter résolument ce qui ne fonctionne pas</strong>.</p><p>Gartner recommande de définir les critères de sortie avant l\'investissement et d\'agir dès qu\'ils sont déclenchés :</p>',
+      stats:[{v:90,s:'',l:'Aucun chemin de production clair → pause',c:'shu',unit:' jours'},{v:500,s:'',l:'Heures d\'ingénierie sans résultat → pause',c:'shu',unit:' h'},{v:3,s:'',l:'Partenaires business non engagés → pause',c:'shu',unit:''}],
+      keyMsg:'Sans discipline de retrait, on laisse les coûts irrécupérables s\'accumuler indéfiniment.',
+      src:'Source : Opening Keynote — Turnaround Criteria'},
+    s8: { tag:'Synthèse', title:'Six axes de réforme',
+      items:[
+        {t:'Transformer la pensée managériale',d:'Du management de projet → au management de portefeuille, construire une AI Assembly Line'},
+        {t:'Transformer la logique de déploiement',d:'D\'abord en production, puis optimiser (Deploy then Redesign), au lieu de concevoir puis pousser'},
+        {t:'Transformer la gouvernance',d:'Les Agents nécessitent une identité IAM indépendante et une matrice RACI'},
+        {t:'Transformer le développement des talents',d:'De « faire plus vite » à « faire plus de choses » — compresser la montée en compétence, élargir les rôles'},
+        {t:'Transformer les indicateurs',d:'Arrêter de mesurer l\'utilisation et le temps gagné, mesurer l\'expansion des capacités'},
+        {t:'Transformer la discipline de sortie',d:'Définir les critères de retrait (90 jours / 500 heures / 3 partenaires), couper ses pertes'},
+      ]},
+    closing: ['La réforme organisationnelle n\'est pas l\'« étape suivante » du déploiement IA,','mais la ','condition préalable',' à la création de valeur par l\'IA.'],
+    footer: 'Gartner CIO Leadership Forum 2026 — Analyse de la Réforme Organisationnelle',
+  },
+  th: {
+    nav: ['หน้าแรก','บริบท','ปฏิรูป 1','ปฏิรูป 2','ปฏิรูป 3','ปฏิรูป 4','ปฏิรูป 5','ปฏิรูป 6','สรุป'],
+    heroTag: 'GARTNER CIO LEADERSHIP FORUM 2026 · OPENING KEYNOTE',
+    heroTitle: ['การปฏิรูปองค์กร','บทวิเคราะห์ประเด็นสำคัญ'],
+    heroSub: 'AI After the Hype — Scaling Human + Machine Value',
+    heroMeta: 'ผู้บรรยาย: Nate Suda, Senior Director Analyst, Gartner',
+    s1: { tag:'บริบท', title:'ความคาดหวังของ CEO เปลี่ยนไปอย่างสิ้นเชิง',
+      stats: [{v:89,s:'%',l:'CEO เพิ่มการลงทุนใน AI',c:'shu'},{v:74,s:'%',l:'คณะกรรมการสนับสนุนให้รับความเสี่ยงทางเทคโนโลยีมากขึ้น (สูงสุดเป็นประวัติการณ์)',c:'shu'},{v:null,l:'ค่าใช้จ่าย AI ทั่วโลกที่คาดการณ์ในปี 2029',c:'kincha',fixed:'$3.5 ล้านล้าน'}],
+      body:'<p>CEO ไม่ได้ถามอีกต่อไปว่า "โปรเจกต์ AI นี้มี ROI เท่าไร"<br/>แต่ถามว่า <strong>"เราจะแข่งขันในเศรษฐกิจที่ AI กำหนดทิศทางได้อย่างไร"</strong></p><p>แรงขับเคลื่อนการปฏิรูปองค์กรได้เลื่อนจากฝ่าย IT ขึ้นสู่ระดับยุทธศาสตร์การบริหาร</p>',
+      src:'แหล่งที่มา: 2026 Gartner CEO and Senior Executive Survey · 2026 Gartner Board of Directors Survey'},
+    s2: { tag:'ปฏิรูป 1', title:'จาก "คิดแบบโปรเจกต์" สู่ "คิดแบบพอร์ตโฟลิโอ"',
+      body1:'<p>การขยายขนาดไม่ใช่การหา use case ที่ดีที่สุดเพียงอย่างเดียว แต่คือการใช้งาน<strong>หลายสิบถึงหลายร้อย use cases ขนาดกลาง</strong>พร้อมกัน เพื่อลดต้นทุนส่วนเพิ่มของโปรเจกต์ใหม่แต่ละรายการ</p>',
+      stats:[{v:1.3,s:'x',l:'ค่าตัวคูณมูลค่า CEO จาก operating patterns ที่ใช้ซ้ำได้',c:'shu'},{v:1.4,s:'x',l:'ค่าตัวคูณมูลค่า CEO จาก Deploy then Redesign',c:'shu'}],
+      body2:'<p>องค์กรต้องสร้าง <strong>AI Assembly Line (สายการประกอบ AI)</strong>: รูปแบบการรวมที่ใช้ซ้ำได้ prompt templates เครื่องมือที่ใช้ร่วมกัน และติดตามอัตราการใช้ซ้ำกับเวลาในการนำไปใช้จริง</p>',
+      keyMsg:'กรณีศึกษา: NHS สหราชอาณาจักร สร้างโปรแกรม AI ส่วนกลางเพื่อส่งเสริมการใช้โมเดลซ้ำ ปัจจุบันเครื่องมือ AI ช่วยตรวจ X-ray ทรวงอกประมาณ 1/3 ของทั้งประเทศ (2.4 ล้านครั้ง)',
+      src:'แหล่งที่มา: Opening Keynote — กรอบ Diamond Chain Navigator'},
+    s3: { tag:'ปฏิรูป 2', title:'ใช้งานก่อน ออกแบบใหม่ทีหลัง',
+      stats:[{v:1.4,s:'x',l:'ค่าตัวคูณมูลค่า CEO ที่ได้รับการรับรองจาก Deploy then Redesign',c:'shu'}],
+      body:'<p>วิธีดั้งเดิม: วางแผน → สร้าง → ผลักดันการเปลี่ยนแปลง <strong>ช้าเกินไป</strong></p><p>วิธีที่ถูกต้อง: <strong>ใช้งาน AI ใน workflow จริงก่อน</strong> สังเกตการใช้งานจริง แล้วจึงออกแบบกระบวนการใหม่จากข้อมูลจริง</p><p>อย่ารอให้ออกแบบสมบูรณ์แบบ — ให้ความเป็นจริงนำทิศทางการปฏิรูป</p>',
+      keyMsg:'เริ่มใช้งานก่อน แล้วค่อยปรับปรุง ให้ข้อมูลตัดสินว่าจะเปลี่ยนองค์กรอย่างไร',
+      src:'แหล่งที่มา: Opening Keynote — Peak Practice: Deploy then Redesign'},
+    s4: { tag:'ปฏิรูป 3', title:'การใช้งาน Agent ต้องมีโครงสร้างธรรมาภิบาลใหม่',
+      grid:[{lb:'แนวทาง',pre:'สร้าง ',tip:'IAM',tipLabel:'IAM Identity',post:' อิสระให้ Agent'},{lb:'ผลลัพธ์',vl:'เพิ่มมูลค่า <span class="accent">1.4x</span> (42% ของ CIO ดำเนินการ)'},{lb:'แนวทาง',pre:'สร้าง ',tip:'RACI',tipLabel:'RACI Matrix',post:''},{lb:'ข้อควรระวัง',vl:'<strong>อย่า</strong>ใส่ Agent ในผังองค์กร'}],
+      body:'<p>การใส่ Agent ในผังองค์กรจะส่งสัญญาณ<strong>"แทนที่มนุษย์" ที่ผิดพลาด</strong> ทำให้เกิดความไม่ไว้วางใจโดยไม่จำเป็น</p><p>Human oversight ควรเป็น<strong>กลยุทธ์การเปลี่ยนผ่าน</strong> (เพื่อชี้แจง decision rights ของ agent) ไม่ใช่กลไกอนุมัติถาวร</p><p>วัฒนธรรมองค์กรเป็นคอขวด: องค์กรที่มี<strong>การตัดสินใจแบบแบน</strong>สามารถมอบอำนาจตัดสินใจให้ agent ได้ง่ายกว่า องค์กรแบบลำดับชั้นจะยากกว่า</p>',
+      src:'แหล่งที่มา: Opening Keynote — Agent Autonomy & RACI'},
+    s5: { tag:'ปฏิรูป 4', title:'ยุติโมเดล "พี่เลี้ยง AI"',
+      stop:{ h:'\u26D4 ต้องหยุด', items:['ติดตาม agent deflection rate (53% กำลังทำ)','ติดตาม human supervision time (52% กำลังทำ)','ใช้ human-in-the-loop เป็นกลยุทธ์ถาวร']},
+      go:{ h:'\u2705 แนวปฏิบัติที่ถูกต้อง', items:['Human oversight เป็น<strong>กลยุทธ์การเปลี่ยนผ่าน</strong>','สร้าง IAM Identity อิสระให้ Agent','สร้าง Agent RACI Matrix กำหนดความรับผิดชอบชัดเจน']},
+      keyMsg:'Human Approval Factory (โมเดลพี่เลี้ยง AI) เป็นสิ่งที่ Gartner ระบุชัดเจนว่าเป็นตัวทำลายมูลค่า CEO',
+      src:'แหล่งที่มา: Opening Keynote — CEO Value Killers'},
+    s6: { tag:'ปฏิรูป 5', title:'จาก "ทำเร็วขึ้น" สู่ "ทำสิ่งที่เคยทำไม่ได้"',
+      stop:{ h:'\u26D4 3 แนวปฏิบัติที่ไม่ได้ผล', items:['วัดความถี่การใช้เครื่องมือ AI (70% กำลังทำ)','อัปเดตบทบาทและการจัดการผลงานเร็วเกินไป (56%)','รายงานเวลาที่ AI ประหยัดได้ (63%)']},
+      go:{ h:'\u2705 แนวปฏิบัติมูลค่าสูงสุด (1.5x ทุกรายการ)', items:['<strong>บีบอัด Time to Mastery</strong> — ใช้ AI เร่งการพัฒนาพนักงานใหม่','<strong>ขยาย Role Range</strong> — ให้พนักงานอาวุโสข้ามไปสู่สายงานที่อยู่ใกล้เคียง']},
+      body:'<p><strong>74%</strong> ของ CFO คิดว่า AI ประหยัดเวลา แต่เพียง <strong>5%</strong> คิดว่าประหยัดเงิน การวัด "เวลาที่ประหยัดได้" ไม่สามารถสร้างมูลค่าได้</p>',
+      keyMsg:'กรณีศึกษา: HISCOX ประกันภัย ใช้ AI training simulator ลดอัตราสอบไม่ผ่านการรับรองของ underwriter ลง 71%',
+      src:'แหล่งที่มา: Opening Keynote — Capability Amplifiers'},
+    s7: { tag:'ปฏิรูป 6', title:'วินัยในการถอนตัว: กล้าหยุดคือการปฏิรูป',
+      body:'<p>การปฏิรูปองค์กรไม่ใช่แค่ "เริ่มสิ่งใหม่" แต่รวมถึง<strong>การหยุดสิ่งที่ไม่สำเร็จอย่างเด็ดขาด</strong></p><p>Gartner แนะนำให้กำหนดเงื่อนไขถอนตัวก่อนลงทุน และดำเนินการทันทีเมื่อเงื่อนไขถูกกระตุ้น:</p>',
+      stats:[{v:90,s:'',l:'ไม่มีเส้นทาง production ชัดเจน → หยุดชั่วคราว',c:'shu',unit:' วัน'},{v:500,s:'',l:'ชั่วโมงวิศวกรรมไม่มีผลลัพธ์ → หยุดชั่วคราว',c:'shu',unit:' ชม.'},{v:3,s:'',l:'business partner ไม่ยืนยัน → หยุดชั่วคราว',c:'shu',unit:' ราย'}],
+      keyMsg:'ไม่มีวินัยในการถอนตัว เท่ากับปล่อยให้ sunk cost ขยายตัวไม่มีที่สิ้นสุด',
+      src:'แหล่งที่มา: Opening Keynote — Turnaround Criteria'},
+    s8: { tag:'สรุป', title:'6 แนวทางการปฏิรูป',
+      items:[
+        {t:'เปลี่ยนวิธีคิดด้านการบริหาร',d:'จากการจัดการโปรเจกต์ → การจัดการพอร์ตโฟลิโอ สร้าง AI Assembly Line'},
+        {t:'เปลี่ยนตรรกะการใช้งาน',d:'เริ่มใช้งานก่อนแล้วค่อยปรับปรุง (Deploy then Redesign) ไม่ใช่ออกแบบแล้วค่อยผลักดัน'},
+        {t:'เปลี่ยนโครงสร้างธรรมาภิบาล',d:'Agent ต้องมี IAM Identity อิสระ และ RACI Matrix'},
+        {t:'เปลี่ยนการพัฒนาบุคลากร',d:'จาก "ทำเร็วขึ้น" สู่ "ทำได้หลากหลายขึ้น" — บีบอัดระยะเรียนรู้ ขยายขอบเขตบทบาท'},
+        {t:'เปลี่ยนวิธีวัดผล',d:'หยุดวัดอัตราการใช้งานและเวลาที่ประหยัดได้ วัดการขยายขีดความสามารถแทน'},
+        {t:'เปลี่ยนวินัยการถอนตัว',d:'กำหนดเงื่อนไขถอนตัวล่วงหน้า (90 วัน / 500 ชม. / 3 พันธมิตร) ตัดขาดทุนอย่างเด็ดขาด'},
+      ]},
+    closing: ['การปฏิรูปองค์กรไม่ใช่ "ขั้นตอนถัดไป" ของการใช้งาน AI','แต่เป็น','เงื่อนไขเบื้องต้น','ของการสร้างมูลค่าจาก AI'],
+    footer: 'Gartner CIO Leadership Forum 2026 — บทวิเคราะห์การปฏิรูปองค์กร',
+  }
+};
+
+/* ── Reveal hook ── */
+function useReveal(threshold = 0.15) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { el.classList.add('visible'); obs.unobserve(el); }
+    }, { threshold, rootMargin: '0px 0px -40px 0px' });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return ref;
+}
+function Reveal({ children, className = '', delay = 0 }) {
+  const ref = useReveal();
+  return <div ref={ref} className={`reveal ${delay ? 'reveal-delay-'+delay : ''} ${className}`}>{children}</div>;
+}
+
+/* ── Counter ── */
+function Counter({ end, suffix = '', prefix = '', unit = '', duration = 1800 }) {
+  const [val, setVal] = useState(0);
+  const ref = useRef(null);
+  const started = useRef(false);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !started.current) {
+        started.current = true;
+        const numEnd = parseFloat(String(end).replace(/[^0-9.]/g, ''));
+        const t0 = performance.now();
+        const step = (now) => {
+          const t = Math.min((now - t0) / duration, 1);
+          const ease = 1 - Math.pow(1 - t, 3);
+          setVal(Math.round(ease * numEnd * 10) / 10);
+          if (t < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }
+    }, { threshold: 0.3 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [end, duration]);
+  const display = Number.isInteger(parseFloat(end)) ? Math.round(val) : val.toFixed(1);
+  return <span ref={ref}>{prefix}{display}{suffix}{unit}</span>;
+}
+
+/* ── HTML renderer ── */
+function Html({ html }) { return <div dangerouslySetInnerHTML={{__html: html}} />; }
+
+/* ── Tooltip component ── */
+function Tip({ term, lang, children }) {
+  const g = GLOSSARY[lang] || GLOSSARY.zh;
+  const text = g[term];
+  if (!text) return <>{children}</>;
+  const id = 'tip-' + term;
+  return <span className="tip" tabIndex={0} role="button" aria-describedby={id}>
+    {children}<span className="tip-text" id={id} role="tooltip">{text}</span>
+  </span>;
+}
+
+/* ── Back to Top ── */
+function BackToTop({ show, behavior }) {
+  return <button className={`back-top ${show ? 'show' : ''}`}
+    onClick={() => window.scrollTo({ top: 0, behavior: behavior || 'smooth' })}
+    aria-label="Back to top">{'\u2191'}</button>;
+}
+
+/* ── Nav IDs ── */
+const NAV_IDS = ['hero','sec-1','sec-2','sec-3','sec-4','sec-5','sec-6','sec-7','sec-8'];
+
+function App() {
+  const [lang, _setLang] = useState('zh');
+  const setLang = useCallback((l) => {
+    if (window.__loadLangFont) window.__loadLangFont(l);
+    const langMap = { zh: 'zh-Hant', ja: 'ja', fr: 'fr', th: 'th' };
+    document.documentElement.lang = langMap[l] || 'zh-Hant';
+    _setLang(l);
+  }, []);
+  const [activeNav, setActiveNav] = useState('hero');
+  const [scrolled, setScrolled] = useState(false);
+  const [showTop, setShowTop] = useState(false);
+  const [showKbd, setShowKbd] = useState(false);
+  const t = T[lang];
+
+  /* keyboard nav */
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'ArrowDown' || e.key === 'j') {
+        e.preventDefault();
+        const idx = NAV_IDS.indexOf(activeNav);
+        if (idx < NAV_IDS.length - 1) document.getElementById(NAV_IDS[idx+1])?.scrollIntoView({ behavior: scrollBehavior });
+      } else if (e.key === 'ArrowUp' || e.key === 'k') {
+        e.preventDefault();
+        const idx = NAV_IDS.indexOf(activeNav);
+        if (idx > 0) document.getElementById(NAV_IDS[idx-1])?.scrollIntoView({ behavior: scrollBehavior });
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [activeNav, scrollBehavior]);
+
+  /* Show keyboard hint on first scroll, dismiss after 5s */
+  const kbdShown = useRef(false);
+  useEffect(() => {
+    const onFirstScroll = () => {
+      if (!kbdShown.current && window.scrollY > 100) {
+        kbdShown.current = true;
+        setShowKbd(true);
+        setTimeout(() => setShowKbd(false), 5000);
+        window.removeEventListener('scroll', onFirstScroll);
+      }
+    };
+    window.addEventListener('scroll', onFirstScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onFirstScroll);
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const st = window.scrollY;
+      setShowTop(st > window.innerHeight);
+      setScrolled(st > 30);
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      document.getElementById('scroll-progress').style.width = (h > 0 ? (st/h)*100 : 0) + '%';
+      const secs = NAV_IDS.map(id => document.getElementById(id)).filter(Boolean);
+      for (let i = secs.length-1; i >= 0; i--) {
+        if (secs[i].getBoundingClientRect().top < window.innerHeight * 0.4) { setActiveNav(NAV_IDS[i]); break; }
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const scrollBehaviorRef = useRef(window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+  const scrollBehavior = scrollBehaviorRef.current;
+  const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior: scrollBehavior });
+
+  return <div className={lang !== 'zh' ? 'lang-'+lang : ''}>
+    <nav className={`sticky-nav ${scrolled ? 'scrolled' : ''}`} aria-label="Section navigation">
+      <div className="nav-brand">Gartner 2026</div>
+      <div style={{display:'flex',alignItems:'center',gap:'16px'}}>
+        <div className="nav-links">
+          {NAV_IDS.map((id,i) => (
+            <button key={id} className={`nav-pill ${activeNav===id?'active':''}`} onClick={()=>go(id)}>{t.nav[i]}</button>
+          ))}
+        </div>
+        <div className="lang-toggle">
+          <button className={`lang-btn ${lang==='zh'?'active':''}`} onClick={()=>setLang('zh')}>中文</button>
+          <button className={`lang-btn ${lang==='ja'?'active':''}`} onClick={()=>setLang('ja')}>日本語</button>
+          <button className={`lang-btn ${lang==='fr'?'active':''}`} onClick={()=>setLang('fr')}>Français</button>
+          <button className={`lang-btn ${lang==='th'?'active':''}`} onClick={()=>setLang('th')}>ไทย</button>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+    {/* Hero */}
+    <section className="hero-section" id="hero" aria-label={t.nav[0]}>
+      <Reveal><div className="hero-tag">{t.heroTag}</div></Reveal>
+      <Reveal delay={1}><h1 className="hero-title">{t.heroTitle[0]}<br/>{t.heroTitle[1]}</h1></Reveal>
+      <Reveal delay={2}><p className="hero-sub">{t.heroSub}</p></Reveal>
+      <Reveal delay={3}><p className="hero-meta">{t.heroMeta}</p></Reveal>
+      <div className="hero-line"></div>
+    </section>
+
+    {/* S1 */}
+    <section className="content-section" id="sec-1" aria-label={t.s1.title}>
+      <Reveal><div className="section-divider"></div></Reveal>
+      <Reveal><div className="section-tag">{t.s1.tag}</div></Reveal>
+      <Reveal delay={1}><h2 className="section-title">{t.s1.title}</h2></Reveal>
+      <div className="stat-grid">
+        {t.s1.stats.map((s,i) => (
+          <Reveal key={i} delay={i}><div className={`stat-card stat-card--${s.c}`}>
+            {s.fixed ? <div className="stat-num" style={{fontSize:'clamp(2rem,3.8vw,3.2rem)'}}>{s.fixed}</div>
+              : <div className="stat-num"><Counter end={s.v} suffix={s.s}/></div>}
+            <div className="stat-label">{s.l}</div>
+          </div></Reveal>
+        ))}
+      </div>
+      <Reveal><div className="section-body"><Html html={t.s1.body}/></div></Reveal>
+      <Reveal><div className="src-line">{t.s1.src}</div></Reveal>
+    </section>
+    <div className="section-sep"><div className="section-sep-line"></div></div>
+
+    {/* S2 */}
+    <section className="content-section" id="sec-2" aria-label={t.s2.title}>
+      <Reveal><div className="section-divider"></div></Reveal>
+      <Reveal><div className="section-tag">{t.s2.tag}</div></Reveal>
+      <Reveal delay={1}><h2 className="section-title">{t.s2.title}</h2></Reveal>
+      <Reveal><div className="section-body"><Html html={t.s2.body1}/></div></Reveal>
+      <div className="stat-grid">
+        {t.s2.stats.map((s,i) => (
+          <Reveal key={i} delay={i}><div className={`stat-card stat-card--${s.c}`}>
+            <div className="stat-num"><Counter end={s.v} suffix={s.s}/></div>
+            <div className="stat-label">{s.l}</div>
+          </div></Reveal>
+        ))}
+      </div>
+      <Reveal><div className="section-body"><Html html={t.s2.body2}/></div></Reveal>
+      <Reveal><div className="key-message">{t.s2.keyMsg}</div></Reveal>
+      <Reveal><div className="src-line">{t.s2.src}</div></Reveal>
+    </section>
+    <div className="section-sep"><div className="section-sep-line"></div></div>
+
+    {/* S3 — HIGHLIGHT full-width band with side-by-side */}
+    <section className="section--highlight" id="sec-3" aria-label={t.s3.title}>
+      <div className="content-inner">
+        <Reveal><div className="section-divider"></div></Reveal>
+        <Reveal><div className="section-tag">{t.s3.tag}</div></Reveal>
+        <Reveal delay={1}><h2 className="section-title">{t.s3.title}</h2></Reveal>
+        <div className="split">
+          <Reveal><div>
+            {t.s3.stats.map((s,i) => (
+              <div key={i} className={`stat-card stat-card--${s.c}`} style={{marginBottom:16}}>
+                <div className="stat-num"><Counter end={s.v} suffix={s.s}/></div>
+                <div className="stat-label">{s.l}</div>
+              </div>
+            ))}
+          </div></Reveal>
+          <Reveal delay={1}><div className="section-body"><Html html={t.s3.body}/></div></Reveal>
+        </div>
+        <Reveal><div className="key-message">{t.s3.keyMsg}</div></Reveal>
+        <Reveal><div className="src-line">{t.s3.src}</div></Reveal>
+      </div>
+    </section>
+
+    {/* S4 — with tooltips + split layout */}
+    <section className="content-section" id="sec-4" aria-label={t.s4.title}>
+      <Reveal><div className="section-divider"></div></Reveal>
+      <Reveal><div className="section-tag">{t.s4.tag}</div></Reveal>
+      <Reveal delay={1}><h2 className="section-title">{t.s4.title}</h2></Reveal>
+      <div className="split">
+        <div className="info-grid" style={{gridTemplateColumns:'1fr'}}>
+          {t.s4.grid.map((g,i) => (
+            <Reveal key={i} delay={i}><div className="info-cell">
+              <div className="info-cell-label">{g.lb}</div>
+              <div className="info-cell-value">
+                {g.tip ? <>{g.pre}<Tip term={g.tip} lang={lang}><strong>{g.tipLabel}</strong></Tip>{g.post}</>
+                  : <Html html={g.vl}/>}
+              </div>
+            </div></Reveal>
+          ))}
+        </div>
+        <Reveal delay={2}><div className="section-body">
+          <Html html={t.s4.body}/>
+        </div></Reveal>
+      </div>
+      <Reveal><div className="src-line">{t.s4.src}</div></Reveal>
+    </section>
+    <div className="section-sep"><div className="section-sep-line"></div></div>
+
+    {/* S5 */}
+    <section className="content-section" id="sec-5" aria-label={t.s5.title}>
+      <Reveal><div className="section-divider"></div></Reveal>
+      <Reveal><div className="section-tag">{t.s5.tag}</div></Reveal>
+      <Reveal delay={1}><h2 className="section-title">{t.s5.title}</h2></Reveal>
+      <div className="duo-grid">
+        <Reveal><div className="duo-card duo-card--stop">
+          <h3>{t.s5.stop.h}</h3>
+          <ul className="duo-list">{t.s5.stop.items.map((it,i)=><li key={i}><Html html={it}/></li>)}</ul>
+        </div></Reveal>
+        <Reveal delay={1}><div className="duo-card duo-card--go">
+          <h3>{t.s5.go.h}</h3>
+          <ul className="duo-list">{t.s5.go.items.map((it,i)=><li key={i}><Html html={it}/></li>)}</ul>
+        </div></Reveal>
+      </div>
+      <Reveal><div className="key-message">{t.s5.keyMsg}</div></Reveal>
+      <Reveal><div className="src-line">{t.s5.src}</div></Reveal>
+    </section>
+    <div className="section-sep"><div className="section-sep-line"></div></div>
+
+    {/* S6 — horizontal comparison (alternate layout from S5) */}
+    <section className="content-section" id="sec-6" aria-label={t.s6.title}>
+      <Reveal><div className="section-divider"></div></Reveal>
+      <Reveal><div className="section-tag">{t.s6.tag}</div></Reveal>
+      <Reveal delay={1}><h2 className="section-title">{t.s6.title}</h2></Reveal>
+      <div className="compare-stack">
+        <Reveal><div className="compare-row compare-row--stop">
+          <div className="compare-label">{t.s6.stop.h.replace(/^[^\s]+\s/,'')}</div>
+          <div className="compare-content">
+            <ul>{t.s6.stop.items.map((it,i)=><li key={i}><Html html={it}/></li>)}</ul>
+          </div>
+        </div></Reveal>
+        <Reveal delay={1}><div className="compare-row compare-row--go">
+          <div className="compare-label">{t.s6.go.h.replace(/^[^\s]+\s/,'')}</div>
+          <div className="compare-content">
+            <ul>{t.s6.go.items.map((it,i)=><li key={i}><Html html={it}/></li>)}</ul>
+          </div>
+        </div></Reveal>
+      </div>
+      {t.s6.body && <Reveal><div className="section-body"><Html html={t.s6.body}/></div></Reveal>}
+      <Reveal><div className="key-message">{t.s6.keyMsg}</div></Reveal>
+      <Reveal><div className="src-line">{t.s6.src}</div></Reveal>
+    </section>
+    <div className="section-sep"><div className="section-sep-line"></div></div>
+
+    {/* S7 */}
+    <section className="content-section" id="sec-7" aria-label={t.s7.title}>
+      <Reveal><div className="section-divider"></div></Reveal>
+      <Reveal><div className="section-tag">{t.s7.tag}</div></Reveal>
+      <Reveal delay={1}><h2 className="section-title">{t.s7.title}</h2></Reveal>
+      <Reveal><div className="section-body"><Html html={t.s7.body}/></div></Reveal>
+      <div className="stat-grid">
+        {t.s7.stats.map((s,i) => (
+          <Reveal key={i} delay={i}><div className={`stat-card stat-card--${s.c}`}>
+            <div className="stat-num"><Counter end={s.v} suffix={s.s} unit={s.unit||''}/></div>
+            <div className="stat-label">{s.l}</div>
+          </div></Reveal>
+        ))}
+      </div>
+      <Reveal><div className="key-message">{t.s7.keyMsg}</div></Reveal>
+      <Reveal><div className="src-line">{t.s7.src}</div></Reveal>
+    </section>
+    <div className="section-sep"><div className="section-sep-line"></div></div>
+
+    {/* S8 */}
+    <section className="content-section" id="sec-8" aria-label={t.s8.title}>
+      <Reveal><div className="section-divider"></div></Reveal>
+      <Reveal><div className="section-tag">{t.s8.tag}</div></Reveal>
+      <Reveal delay={1}><h2 className="section-title">{t.s8.title}</h2></Reveal>
+      <div className="takeaway-list">
+        {t.s8.items.map((item,i) => (
+          <Reveal key={i} delay={Math.min(i,4)}>
+            <div className="takeaway-card">
+              <div className="takeaway-num">{i+1}</div>
+              <div><h3>{item.t}</h3><p>{item.d}</p></div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+
+    {/* Closing */}
+    <section className="closing-section" aria-label="closing">
+      <Reveal><p className="closing-text">
+        {t.closing[0]}<br/>{t.closing[1]}<span className="hl">{t.closing[2]}</span>{t.closing[3]}
+      </p></Reveal>
+      <Reveal delay={1}><p className="closing-src">Gartner CIO Leadership Forum 2026 · Opening Keynote</p></Reveal>
+    </section>
+
+    </main>
+    <footer className="site-footer">{t.footer}</footer>
+
+    <BackToTop show={showTop} behavior={scrollBehavior} />
+    <div className={`kbd-hint ${showKbd ? 'show' : ''}`}>
+      <kbd>{'\u2191'}</kbd> <kbd>{'\u2193'}</kbd> or <kbd>j</kbd> <kbd>k</kbd> to navigate
+    </div>
+  </div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
